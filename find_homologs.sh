@@ -10,4 +10,10 @@ tblastn -query "$protein_query" -subject "$nucleotide_subject" -outfmt "6 qseqid
 awk '$3 > 30 && $4 > 0.9 * length($1)' blast_results.txt > filtered_hits.txt
 
 match_count=$(wc -l < filtered_hits.txt)
+echo "Number of matches identified: $match_count"  
 
+# Save the filtered matches to the specified output file
+mv filtered_hits.txt "$output_file"  
+
+# Clean up intermediate files
+rm blast_results.txt 
