@@ -9,4 +9,5 @@ tblastn -query "$protein_query" -subject "$nucleotide_subject" -outfmt "6 qseqid
 # Filter hits to keep only those with >30% sequence identity and >90% match length
 awk '$3 > 30 && $4 > 0.9 * length($1)' blast_results.txt > filtered_hits.txt
 
+match_count=$(wc -l < filtered_hits.txt)
 
