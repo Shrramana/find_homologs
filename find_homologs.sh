@@ -1,14 +1,18 @@
+#!/usr/bin/bash 
 cd /home/shrramana/biol7200/class3/ex3/
 
-protein_q="$1"
-nucl_sub="$2"
-output_file="$3"
+query_seqs="$1" 
+genome_assembly="$2" 
+genes_bed="$3" 
+outfile="$4" 
+# Perform tblastn search and save results to a temporary file 
 
-tblastn -query "$protein_q" -subject "$nucl_sub" -outfmt "6 qseqid sseqid pident length qlen" > blast_results.txt
+tmpfile=$(mktemp)
 
-awk '$3 > 30 && $4 > (0.9 * $5)' blast_results.txt > $output_file
+tblastn -query "$query_seqs" -subject "$genome_assembly" -outfmt "6 std qlen" | awk '$3 > 30 && $4 > (0.9 * $13)' > blast_results.txt
 
-match_count=$(wc -l < $output_file)
-echo "Number of matches identified: $match_count"  
+match_count=$(wc -l < blast_results.txt)
+echo "Number of tblastn matches identified from $genome_assembly: $match_count"
 
-#rm blast_results.txt 
+awk 'NR==FNR { positions[$9,$10]; next } { for (pos in positions) { split(pos, arr, SUBSEP); if ($2 <= arr[1] && $3 >= arr[2]) print $4 } }' blast_results.txt $genes_bed > $outfile
+
