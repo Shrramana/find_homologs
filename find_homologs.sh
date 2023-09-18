@@ -16,3 +16,6 @@ echo "Number of tblastn matches identified from $genome_assembly: $match_count"
 
 awk 'NR==FNR { positions[$9,$10]; next } { for (pos in positions) { split(pos, arr, SUBSEP); if ($2 <= arr[1] && $3 >= arr[2]) print $4 } }' blast_results.txt $genes_bed > $outfile
 
+match_count1=$(sort -u $outfile | wc -l)
+echo "Number of matches identified from given bed file $genes_bed: $match_count1"
+echo
