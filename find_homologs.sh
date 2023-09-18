@@ -18,4 +18,5 @@ awk 'NR==FNR { positions[$9,$10]; next } { for (pos in positions) { split(pos, a
 
 match_count1=$(sort -u $outfile | wc -l)
 echo "Number of matches identified from given bed file $genes_bed: $match_count1"
+
 echo
